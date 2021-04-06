@@ -27,18 +27,10 @@ class VideoSerializer(serializers.ModelSerializer):
         return comments_serializer.data
 
     def get_isLiked(self, instance):
-        video_isLiked = VideoLike.objects.filter(Q(video=instance.id) & Q(user=self.context["request"].user.id))
-        liked = False
-        if video_isLiked.count() > 0:
-            liked = True
-        return liked
+        return VideoLike.objects.filter(Q(video=instance.id) & Q(user=self.context["request"].user.id)).exists()
 
     def get_isDisliked(self, instance):
-        video_isDisliked = VideoDislike.objects.filter(Q(video=instance.id) & Q(user=self.context["request"].user.id))
-        disliked = False
-        if video_isDisliked.count() > 0:
-            disliked = True
-        return disliked
+        return VideoDislike.objects.filter(Q(video=instance.id) & Q(user=self.context["request"].user.id)).exists()
 
     def get_likesCount(self, instance):
         return VideoLike.objects.filter(Q(video=instance.id)).count()
@@ -47,16 +39,10 @@ class VideoSerializer(serializers.ModelSerializer):
         return VideoDislike.objects.filter(Q(video=instance.id)).count()
 
     def get_isVideoMine(self, instance):
-        mine = False
-        if instance.user_id == self.context["request"].user.id:
-            mine = True
-        return mine
+        return instance.user_id == self.context["request"].user.id
 
     def get_isSubscribed(self, instance):
-        subscribed = False
-        if Subscription.objects.filter(Q(channel=instance.user_id) & Q(subscriber=self.context["request"].user.id)).count() > 0:
-            subscribed = True
-        return subscribed
+        return Subscription.objects.filter(Q(channel=instance.user_id) & Q(subscriber=self.context["request"].user.id)).exists()
 
     def get_views(self, instance):
         return View.objects.filter(Q(video=instance.id)).count()
@@ -128,10 +114,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return self.context['request'].user.id == instance.id
 
     def get_isSubscribed(self, instance):
-        subscribed = False
-        if Subscription.objects.filter(Q(channel=instance.id) & Q(subscriber=self.context["request"].user.id)).count() > 0:
-            subscribed = True
-        return subscribed
+        return Subscription.objects.filter(Q(channel=instance.id) & Q(subscriber=self.context["request"].user.id)).exists()
 
     def get_subscribersCount(self, instance):
         return Subscription.objects.filter(Q(channel=instance.id)).count() 
