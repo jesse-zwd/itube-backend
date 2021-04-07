@@ -134,6 +134,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+# rest_framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
@@ -150,14 +151,18 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
-#JWT配置
+#JWT
 from datetime import timedelta
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+
     'SLIDING_TOKEN_LIFETIME': timedelta(days=7),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
 
-# redis配置
+# redis
 # CACHES = {
 #     "default": {
 #         "BACKEND": "django_redis.cache.RedisCache",

@@ -77,16 +77,10 @@ class UserChannelsSerializer(serializers.ModelSerializer):
         return Video.objects.filter(Q(user=instance.id)).count()
     
     def get_isSubscribed(self, instance):
-        subscribed = False
-        if Subscription.objects.filter(Q(channel=instance.id) & Q(subscriber=self.context["request"].user.id)).count() > 0:
-            subscribed = True
-        return subscribed
+        return Subscription.objects.filter(Q(channel=instance.id) & Q(subscriber=self.context["request"].user.id)).exists()
 
     def get_isMe(self, instance):
-        isMe = False
-        if instance.id == self.context["request"].user.id:
-            isMe = True
-        return isMe
+        return instance.id == self.context["request"].user.id
 
     class Meta:
         model = User

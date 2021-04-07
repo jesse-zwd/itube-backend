@@ -130,7 +130,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = User
-        fields = ("id", "username", "first_name", "last_name", "channelDescription", "avatar", "cover", "videos", "isMe", "isSubscribed", "subscribersCount", "channels")
+        fields = ("id", "nickname", "first_name", "last_name", "channelDescription", "avatar", "cover", "videos", "isMe", "isSubscribed", "subscribersCount", "channels")
 
 
 class VideoCreateSerializer(serializers.ModelSerializer):
