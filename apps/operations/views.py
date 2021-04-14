@@ -24,9 +24,7 @@ class CommentsViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.G
         return []
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return CommentsSerializer
-        elif self.action == "create":
+        if self.action == "create":
             return CommentCreateSerializer
 
         return CommentsSerializer

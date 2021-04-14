@@ -2,7 +2,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import mixins, viewsets, filters
 from rest_framework.permissions import IsAuthenticated
-from utils.permissions import IsOwnerOrReadOnly
 from rest_framework import permissions
 from rest_framework.authentication import SessionAuthentication
 from django.contrib.auth import get_user_model
@@ -24,7 +23,7 @@ class SignupViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 
 class ProfileViewset(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    permission_class = IsAuthenticated
     authentication_classes = (JWTAuthentication, SessionAuthentication )
     queryset = User.objects.all()
 
