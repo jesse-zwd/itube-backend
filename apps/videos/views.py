@@ -13,19 +13,10 @@ from operations.models import Subscription
 class VideoViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     queryset = Video.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('title', 'description')
-
-    def get_permissions(self):
-        if self.action == "retrieve":
-            return [permissions.IsAuthenticated()]
-        if self.action == "create":
-            return [permissions.IsAuthenticated()]
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-
-        return []
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -36,6 +27,7 @@ class VideoViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retrie
 
 class FeedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = VideoSerializer
     
     def get_queryset(self):
@@ -45,16 +37,11 @@ class FeedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
             ids.append(s['channel_id'])
         return Video.objects.filter(user__in=ids).order_by('-createdAt')
 
-    def get_permissions(self):
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-
-        return []
-        
 
 class VideoRecommendedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = VideoSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     
     def get_queryset(self):
         videos = VideoRecommended.objects.all().values()
@@ -62,9 +49,3 @@ class VideoRecommendedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         for v in videos:
             ids.append(v['video_id'])
         return Video.objects.filter(id__in=ids).order_by('-createdAt')
-
-    def get_permissions(self):
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-
-        return []

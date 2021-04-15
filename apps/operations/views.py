@@ -16,12 +16,7 @@ class CommentsViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.G
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     queryset = Comment.objects.all()
     serializer_class = CommentsSerializer
-
-    def get_permissions(self):
-        if self.action == "create":
-            return [permissions.IsAuthenticated()]
-
-        return []
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -33,101 +28,64 @@ class CommentsViewset(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.G
 class VideoLikeViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = VideoLikeSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'video_id'
 
     def get_queryset(self):
         return VideoLike.objects.filter(user=self.request.user)
-
-    def get_permissions(self):
-        if self.action == "create":
-            return [permissions.IsAuthenticated()]
-        elif self.action == "destroy":
-            return [permissions.IsAuthenticated()]
-
-        return []
 
 
 class VideoDislikeViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = VideoDislikeSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'video_id'
 
     def get_queryset(self):
         return VideoDislike.objects.filter(user=self.request.user)
 
-    def get_permissions(self):
-        if self.action == "create":
-            return [permissions.IsAuthenticated()]
-        elif self.action == "destroy":
-            return [permissions.IsAuthenticated()]
-
-        return []
-
 
 class SubscriptionViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = SubscriptionSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'channel_id'
 
     def get_queryset(self):
         return Subscription.objects.filter(subscriber=self.request.user.id)
 
-    def get_permissions(self):
-        if self.action == "create":
-            return [permissions.IsAuthenticated()]
-        elif self.action == "destroy":
-            return [permissions.IsAuthenticated()]
-        elif self.action == "retrieve":
-            return [permissions.IsAuthenticated()]
-
-        return []
-
 
 class VideosLikedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = VideosLikedSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return VideoLike.objects.filter(user=self.request.user)
-        
-    def get_permissions(self):
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-    
-        return []
 
 
 class ViewsViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = ViewCreateSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return View.objects.filter(user=self.request.user)
-        
-    def get_permissions(self):
-        if self.action == "create":
-            return [permissions.IsAuthenticated()]
-    
-        return []
 
 
 class VideosViewedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     serializer_class = VideosViewedSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return View.objects.filter(user=self.request.user)
-        
-    def get_permissions(self):
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-    
-        return []
 
 
 class ChannelRecommendedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JWTAuthentication, SessionAuthentication )
     serializer_class = UserChannelsSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         channels = ChannelRecommended.objects.all().values()
@@ -135,9 +93,3 @@ class ChannelRecommendedViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         for c in channels:
             ids.append(c['channel_id'])
         return User.objects.filter(id__in=ids).order_by('-date_joined')
-
-    def get_permissions(self):
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-
-        return []

@@ -16,7 +16,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=Subscription.objects.all(),
                 fields=('subscriber', 'channel'),
-                message="已经订阅"
+                message="subscribed"
             )
         ]
         fields = ('subscriber', 'channel')
@@ -51,7 +51,7 @@ class ViewCreateSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=View.objects.all(),
                 fields=('user', 'video'),
-                message="已经观看"
+                message="viewed"
             )
         ]
         fields = ('user', 'video')
@@ -68,7 +68,7 @@ class VideoLikeSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=VideoLike.objects.all(),
                 fields=('user', 'video'),
-                message="已经点赞"
+                message="liked"
             )
         ]
 
@@ -86,7 +86,7 @@ class VideoDislikeSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=VideoDislike.objects.all(),
                 fields=('user', 'video'),
-                message="已经不赞"
+                message="disliked"
             )
         ]
 

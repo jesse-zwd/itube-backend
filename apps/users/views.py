@@ -2,7 +2,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import mixins, viewsets, filters
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
 from rest_framework.authentication import SessionAuthentication
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
@@ -23,7 +22,7 @@ class SignupViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 
 class ProfileViewset(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    permission_class = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication, SessionAuthentication )
     queryset = User.objects.all()
 
@@ -35,15 +34,11 @@ class ProfileViewset(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewset
 
 
 class UsersViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
-    authentication_classes = (JWTAuthentication, SessionAuthentication )
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     queryset = User.objects.exclude(is_staff=True)  
     serializer_class = UserChannelsSerializer
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('username', 'channelDescription')
 
-    def get_permissions(self):
-        if self.action == "list":
-            return [permissions.IsAuthenticated()]
-
-        return []
