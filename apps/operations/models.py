@@ -12,7 +12,7 @@ User = get_user_model()
 
 class Comment(models.Model):
     text = models.CharField(max_length=500, default='', verbose_name='comment')
-    video = models.ForeignKey(Video, related_name='comments', on_delete=models.CASCADE, verbose_name='视频')
+    video = models.ForeignKey(Video, related_name='comments', on_delete=models.CASCADE, verbose_name='video')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='commentor')
     createdAt = models.DateTimeField(default=datetime.now, verbose_name='time of creating')
   
