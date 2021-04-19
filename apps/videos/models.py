@@ -13,7 +13,7 @@ class Video(models.Model):
     description = models.CharField(max_length=300, default='description', verbose_name='description')
     url = models.CharField(max_length=500, default='url', verbose_name='url')
     thumbnail = models.CharField(max_length=500, default='thumbnail', verbose_name='thumbnail')
-    createdAt = models.DateTimeField(verbose_name='time of creating', default=datetime.now)
+    createdAt = models.DateTimeField(verbose_name='createdAt', default=datetime.now)
     updatedAt = models.DateTimeField(verbose_name='time of updating', default=datetime.now)
 
     def __str__(self):
@@ -26,7 +26,7 @@ class Video(models.Model):
 
 class VideoRecommended(models.Model):
     video = models.ForeignKey(Video, verbose_name='video', on_delete=models.CASCADE)
-    createdAt = models.DateTimeField(verbose_name='time of creating', default=datetime.now)
+    createdAt = models.DateTimeField(verbose_name='createdAt', default=datetime.now)
 
     def __str__(self):
         return self.video.title
